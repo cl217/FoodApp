@@ -20,7 +20,9 @@ function MainContainer() {
     <NavigationContainer>
       <Tab.Navigator
         initialRouteName={homeName}
+        //screenOptions ={{headerShown: false}}
         screenOptions={({ route }) => ({
+          headerShown: false,
           activeTintColor: 'tomato',
           inactiveTintColor: 'grey',
           labelStyle: { paddingBottom: 10, fontSize: 10 },
