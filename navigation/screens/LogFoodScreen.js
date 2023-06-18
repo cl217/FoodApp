@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import Meal from '../../components/Meal';
 
 export default function LogFoodScreen({ navigation }) {
@@ -14,7 +14,7 @@ export default function LogFoodScreen({ navigation }) {
       });
     
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={styles.tasksWrapper}>
                 <Text style={styles.sectionTitle}>{dateString}</Text>
                 <View style={styles.items}>
@@ -24,7 +24,7 @@ export default function LogFoodScreen({ navigation }) {
                     <Meal text={"Snacks"}></Meal>
                 </View>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 
