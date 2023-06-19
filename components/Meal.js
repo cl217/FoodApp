@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
   },
   addFoodButton: {
     marginLeft: 'auto', // Pushes the button to the top right
+    width: 80,
   },
   foodList: {
     marginTop: 10,
