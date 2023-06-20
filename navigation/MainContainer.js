@@ -2,18 +2,35 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { createStackNavigator } from '@react-navigation/stack';
+
 
 // Screens
 import HomeScreen from './screens/HomeScreen';
 import SaveFoodScreen from './screens/SaveFoodScreen';
 import LogFoodScreen from './screens/LogFoodScreen';
+import CreateFoodScreen from './screens/CreateFoodScreen';
 
 //Screen names
 const homeName = "Home";
 const LogFood = "Log";
 const Foods = "Foods";
+const createFood = "Create Food";
+
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+
+
+function SaveFoodScreenStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name={Foods} component={SaveFoodScreen} options={{ headerShown: false }}/>
+      <Stack.Screen name={createFood} component={CreateFoodScreen} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  );
+}
 
 function MainContainer() {
   return (
@@ -48,11 +65,14 @@ function MainContainer() {
 
         <Tab.Screen name={homeName} component={HomeScreen} />
         <Tab.Screen name={LogFood} component={LogFoodScreen} />
-        <Tab.Screen name={Foods} component={SaveFoodScreen} />
+        <Tab.Screen name={Foods} component={SaveFoodScreenStack} />
 
       </Tab.Navigator>
     </NavigationContainer>
   );
 }
+
+
+
 
 export default MainContainer;

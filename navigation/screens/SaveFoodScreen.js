@@ -3,6 +3,7 @@ import { FlatList, StyleSheet, View, Text } from 'react-native';
 import savedFoodData from '../../data/savedFoodData';
 import {PrimaryButton, SecondaryButton} from '../../components/Button';
 import COLORS from '../../consts/colors'
+import CreateFoodScreen from './CreateFoodScreen';
 
 class FlatListItem extends Component{
   render(){
@@ -28,7 +29,10 @@ export default function SaveFoodScreen({ navigation }) {
                 <Text style={styles.sectionTitle}>{"My Foods"}</Text>
 
                 <View style={styles.addFoodButton}>
-                <SecondaryButton title={"Create Food"}></SecondaryButton> 
+                    <SecondaryButton 
+                        title={"Create Food"}
+                        onPress={() => navigation.navigate('Create Food')}
+                    ></SecondaryButton> 
                 </View>
 
 
