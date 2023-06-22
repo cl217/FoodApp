@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, KeyboardAvoidingView, ScrollView} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import CustomPicker from 'react-native-custom-picker';
 import {PrimaryButton, SecondaryButton} from '../../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { savedFoodData } from '../../data/savedFoodData';
 
 
 
@@ -21,27 +22,19 @@ export default function CreateFoodScreen({ navigation }) {
 
     const handleSaveFood = async () => {
         try {
-          // Retrieve the existing saved foods from AsyncStorage
-          const storedFoods = await AsyncStorage.getItem('savedFoods');
-          let savedFoods = [];
-    
-          if (storedFoods) {
-            // If there are existing saved foods, parse them into an array
-            savedFoods = JSON.parse(storedFoods);
-          }
-    
+
           // Create a new food object with values from the text input
           const newFood = {
-            name: foodName, // Set the name of the food as desired
-            protein: parseFloat(protein), // Parse the protein value as a float
+            name: foodName, 
+            protein: parseFloat(protein),
           };
     
     
           // Add the new food object to the saved foods array
-          savedFoods.push(newFood);
+          savedFoodData.push(newFood); // Add the new food to savedFoodData array
     
           // Save the updated saved foods array back to AsyncStorage
-          await AsyncStorage.setItem('savedFoods', JSON.stringify(savedFoods));
+          await AsyncStorage.setItem('savedFoods', JSON.stringify(savedFoodData)); // Update saved foods in AsyncStorage
     
           // Navigate back to the Foods screen or any desired screen
           navigation.navigate('SavedFoods');
@@ -52,8 +45,17 @@ export default function CreateFoodScreen({ navigation }) {
         }
       };
 
+
+      const keyboardAvoidingBehavior = Platform.OS === 'ios' ? 'padding' : undefined;
+
   return (
-    <View style={styles.container}>
+
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={keyboardAvoidingBehavior}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+    >
+    <ScrollView>
         <Text style={styles.label}>Nutrition Facts</Text>
 
         <View style={styles.infoContainer}>
@@ -236,7 +238,9 @@ export default function CreateFoodScreen({ navigation }) {
             onPress={() => navigation.navigate('SavedFoods')}
         ></SecondaryButton> 
         </View>
-    </View>
+    </ScrollView>
+    </KeyboardAvoidingView>
+
   );
 }
 
@@ -248,8 +252,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 80,
-        paddingBottom: 80,
-        paddingHorizontal: 20,      alignItems: 'center',
+        // paddingBottom: 80,
+        paddingHorizontal: 20,
     },
     label: {
       fontSize: 20,

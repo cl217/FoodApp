@@ -5,7 +5,7 @@ import COLORS from '../../consts/colors'
 import CreateFoodScreen from './CreateFoodScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
-
+import { savedFoodData } from '../../data/savedFoodData';
 
 
 // class FlatListItem extends Component{
@@ -26,31 +26,22 @@ import { useFocusEffect } from '@react-navigation/native';
 
 
 export default function SaveFoodScreen({ navigation }) {
-
-    const [savedFoodData, setSavedFoodData] = useState([]);
-
-    useFocusEffect(
-        React.useCallback(() => {
-          loadSavedFoods(); // Call your desired function here
-        }, [])
-      );
-  
-    // Function to load the saved foods from AsyncStorage
-    const loadSavedFoods = async () => {
-        console.log("loading food");
-      try {
-        const storedFoods = await AsyncStorage.getItem('savedFoods');
-  
-        if (storedFoods) {
-          // Parse the stored foods into an array
-          const parsedFoods = JSON.parse(storedFoods);
-          setSavedFoodData(parsedFoods);
+    useEffect(() => {
+        loadSavedFoods(); // Call the function to load saved foods when the component mounts
+      }, []);
+    
+      const loadSavedFoods = async () => {
+        try {
+          const storedFoods = await AsyncStorage.getItem('savedFoods');
+    
+          if (storedFoods) {
+            const parsedFoods = JSON.parse(storedFoods);
+            savedFoodData.splice(0, savedFoodData.length, ...parsedFoods); // Replace the contents of savedFoodData with parsedFoods
+          }
+        } catch (error) {
+          console.log('Error loading saved foods:', error);
         }
-      } catch (error) {
-        console.log('Error loading saved foods:', error);
-      }
-    };
-  
+      };
     const renderFlatListItem = ({ item }) => (
       <View style={styles.foodListItem}>
         <View style={styles.foodName}>
@@ -61,8 +52,6 @@ export default function SaveFoodScreen({ navigation }) {
         </View>
       </View>
     );
-
-
 
     return (
         <View style={styles.container}>
