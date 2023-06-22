@@ -14,6 +14,7 @@ import CreateFoodScreen from './screens/CreateFoodScreen';
 //Screen names
 const homeName = "Home";
 const LogFood = "Log";
+const SavedFoods = "SavedFoods";
 const Foods = "Foods";
 const createFood = "Create Food";
 
@@ -26,7 +27,7 @@ const Stack = createStackNavigator();
 function SaveFoodScreenStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name={Foods} component={SaveFoodScreen} options={{ headerShown: false }}/>
+      <Stack.Screen name={SavedFoods} component={SaveFoodScreen} options={{ headerShown: false, unmountOnBlur: true }}/>
       <Stack.Screen name={createFood} component={CreateFoodScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
@@ -71,8 +72,5 @@ function MainContainer() {
     </NavigationContainer>
   );
 }
-
-
-
 
 export default MainContainer;

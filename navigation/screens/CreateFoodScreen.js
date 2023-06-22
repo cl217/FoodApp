@@ -2,19 +2,71 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import CustomPicker from 'react-native-custom-picker';
+import {PrimaryButton, SecondaryButton} from '../../components/Button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+
 
 
 
 
 export default function CreateFoodScreen({ navigation }) {
+    const [foodName, setFoodName] = useState('');
     const [calories, setCalories] = useState('');
     const [fat, setFat] = useState('');
     const [carbs, setCarbs] = useState('');
     const [protein, setProtein] = useState('');
 
+
+    const handleSaveFood = async () => {
+        try {
+          // Retrieve the existing saved foods from AsyncStorage
+          const storedFoods = await AsyncStorage.getItem('savedFoods');
+          let savedFoods = [];
+    
+          if (storedFoods) {
+            // If there are existing saved foods, parse them into an array
+            savedFoods = JSON.parse(storedFoods);
+          }
+    
+          // Create a new food object with values from the text input
+          const newFood = {
+            name: foodName, // Set the name of the food as desired
+            protein: parseFloat(protein), // Parse the protein value as a float
+          };
+    
+    
+          // Add the new food object to the saved foods array
+          savedFoods.push(newFood);
+    
+          // Save the updated saved foods array back to AsyncStorage
+          await AsyncStorage.setItem('savedFoods', JSON.stringify(savedFoods));
+    
+          // Navigate back to the Foods screen or any desired screen
+          navigation.navigate('SavedFoods');
+          console.log('Navingating back to savedFoodScreen');
+    
+        } catch (error) {
+          console.log('Error saving food:', error);
+        }
+      };
+
   return (
     <View style={styles.container}>
         <Text style={styles.label}>Nutrition Facts</Text>
+
+        <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel}>Name</Text>
+            <TextInput
+            style={styles.infoInput}
+            value={foodName}
+            onChangeText={setFoodName}
+            keyboardType="numeric"
+            />
+        </View>
+
+
 
         <View style={styles.infoContainer}>
             <Text style={styles.infoLabel}>Serving Size:</Text>
@@ -170,9 +222,27 @@ export default function CreateFoodScreen({ navigation }) {
             />
             <Text>g</Text>
         </View>
+
+
+        <View style={styles.addFoodButton}>
+        <SecondaryButton 
+            title={"Create Food"}
+            onPress={handleSaveFood}        
+        ></SecondaryButton> 
+
+
+        <SecondaryButton 
+            title={"Cancel"}
+            onPress={() => navigation.navigate('SavedFoods')}
+        ></SecondaryButton> 
+        </View>
     </View>
   );
 }
+
+
+
+
 
 const styles = StyleSheet.create({
     container: {
