@@ -10,13 +10,20 @@ import HomeScreen from './screens/HomeScreen';
 import SaveFoodScreen from './screens/SaveFoodScreen';
 import LogFoodScreen from './screens/LogFoodScreen';
 import CreateFoodScreen from './screens/CreateFoodScreen';
+import AddFoodScreen from './screens/AddFoodScreen';
 
 //Screen names
 const homeName = "Home";
-const LogFood = "Log";
-const SavedFoods = "SavedFoods";
-const Foods = "Foods";
-const createFood = "Create Food";
+
+const LogStack = "Log"
+const LogFood = "Log Food";
+const AddFood = "Add Food";
+
+const FoodsStack = "Foods";
+const SavedFoods = "Saved Foods";
+const CreateFood = "Create Food";
+
+
 
 
 const Tab = createBottomTabNavigator();
@@ -28,10 +35,21 @@ function SaveFoodScreenStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen name={SavedFoods} component={SaveFoodScreen} options={{ headerShown: false, unmountOnBlur: true }}/>
-      <Stack.Screen name={createFood} component={CreateFoodScreen} options={{ headerShown: false }} />
+      <Stack.Screen name={CreateFood} component={CreateFoodScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
+
+function LogFoodScreenStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name={LogFood} component={LogFoodScreen} options={{ headerShown: false, unmountOnBlur: true }}/>
+      <Stack.Screen name={AddFood} component={AddFoodScreen} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  );
+}
+
+
 
 function MainContainer() {
   return (
@@ -52,10 +70,10 @@ function MainContainer() {
             if (rn === homeName) {
               iconName = focused ? 'home' : 'home-outline';
 
-            } else if (rn === LogFood) {
+            } else if (rn === LogStack) {
               iconName = focused ? 'clipboard' : 'clipboard-outline';
 
-            } else if (rn === Foods) {
+            } else if (rn === FoodsStack) {
               iconName = focused ? 'fast-food' : 'fast-food-outline';
             }
 
@@ -65,8 +83,8 @@ function MainContainer() {
         })}>
 
         <Tab.Screen name={homeName} component={HomeScreen} />
-        <Tab.Screen name={LogFood} component={LogFoodScreen} />
-        <Tab.Screen name={Foods} component={SaveFoodScreenStack} />
+        <Tab.Screen name={LogStack} component={LogFoodScreenStack} />
+        <Tab.Screen name={FoodsStack} component={SaveFoodScreenStack} />
 
       </Tab.Navigator>
     </NavigationContainer>

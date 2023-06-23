@@ -1,28 +1,15 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import COLORS from '../consts/colors';
 import {PrimaryButton, SecondaryButton} from '../components/Button';
 import foodListData from '../data/foodListData';
-import { Card } from 'react-native-paper'; // Import Card from react-native-paper
+import { useNavigation } from '@react-navigation/native';
 
 
-// class FlatListItem extends Component{
-//   render(){
-//     return (
-//       <View style={styles.foodListItem}>
-//         <View style={styles.foodName}>
-//           <Text>{this.props.item.name}</Text>
-//         </View>
-//         <View style={styles.foodCalories}>
-//           <Text>{this.props.item.calories}</Text>
-//         </View>
-//       </View>
-//     )
-//   }
-// };
 
 const Meal = (props) => {
+
+  const navigation = useNavigation();
+
   return (
     <View style={styles.meal}>
 
@@ -31,7 +18,10 @@ const Meal = (props) => {
           <Text style={styles.mealHeadingText}>{props.text}</Text>
         </View>
         <View style={styles.addFoodButton}>
-          <PrimaryButton title={"Add Food"}></PrimaryButton>
+          <PrimaryButton 
+            title={"Add Food"}
+            onPress={() => navigation.navigate('Add Food')}
+            ></PrimaryButton>
         </View>
       </View>
 

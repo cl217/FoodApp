@@ -4,16 +4,16 @@ import {SecondaryButton} from '../../components/Button';
 import SavedFoodList from '../../components/SavedFoodList';
 
 
-export default function SaveFoodScreen({ navigation }) {
+export default function AddFoodScreen({ navigation }) {
     return (
         <View style={styles.container}>
           <View style={styles.tasksWrapper}>
-            <Text style={styles.sectionTitle}>{"My Foods"}</Text>
+            <Text style={styles.sectionTitle}>{"Add Foods"}</Text>
     
             <View style={styles.addFoodButton}>
               <SecondaryButton
-                title={"Create Food"}
-                onPress={() => navigation.navigate('Create Food')}
+                title={"Add Food"}
+                onPress={() => navigation.navigate('Log Food')}
               />
             </View>
     
