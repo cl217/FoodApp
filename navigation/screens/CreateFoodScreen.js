@@ -5,6 +5,9 @@ import CustomPicker from 'react-native-custom-picker';
 import {PrimaryButton, SecondaryButton} from '../../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { savedFoodData } from '../../data/savedFoodData';
+import { Header } from 'react-navigation-stack';
+import { Ionicons } from '@expo/vector-icons';
+
 
 
 
@@ -77,8 +80,23 @@ export default function CreateFoodScreen({ navigation }) {
       behavior={keyboardAvoidingBehavior}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
     >
+
+
+
+    <View style={styles.header}>
+          <Ionicons name="arrow-back" size={24} color="black" onPress={() => navigation.goBack()}/>
+          
+          <Text style={styles.label}>Nutrition Facts</Text>
+
+          <Ionicons
+            name="checkmark"
+            size={24}
+            color="black"
+            onPress={handleSaveFood}
+          />
+    </View>
+
     <ScrollView>
-        <Text style={styles.label}>Nutrition Facts</Text>
 
         <View style={styles.infoContainer}>
             <Text style={styles.infoLabel}>Name</Text>
@@ -225,7 +243,7 @@ export default function CreateFoodScreen({ navigation }) {
         </View>
 
 
-        <View style={styles.addFoodButton}>
+        {/* <View style={styles.addFoodButton}>
         <SecondaryButton 
             title={"Create Food"}
             onPress={handleSaveFood}        
@@ -236,7 +254,7 @@ export default function CreateFoodScreen({ navigation }) {
             title={"Cancel"}
             onPress={() => navigation.navigate('Saved Foods')}
         ></SecondaryButton> 
-        </View>
+        </View> */}
     </ScrollView>
     </KeyboardAvoidingView>
 
@@ -250,14 +268,26 @@ export default function CreateFoodScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 80,
+        paddingTop: 40,
         // paddingHorizontal: 20,
         backgroundColor: '#E8EAED',
     },
+
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        // alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingTop: 10,
+        paddingBottom: 10,
+        borderBottomWidth: 2,
+        borderBottomColor: '#CCCCCC',
+    },
+
     label: {
       fontSize: 20,
       fontWeight: 'bold',
-      marginBottom: 20,
+    //   marginBottom: 20,
       textAlign: 'center',
     },
 
