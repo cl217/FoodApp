@@ -6,53 +6,10 @@ import CreateFoodScreen from './CreateFoodScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { savedFoodData } from '../../data/savedFoodData';
-
-
-// class FlatListItem extends Component{
-//   render(){
-//     return (
-//       <View style={styles.foodListItem}>
-//         <View style={styles.foodName}>
-//           <Text>{this.props.item.name}</Text>
-//         </View>
-//         <View style={styles.foodCalories}>
-//           <Text>{this.props.item.calories}</Text>
-//         </View>
-//       </View>
-//     )
-//   }
-// };
-
+import SavedFoodList from '../../components/SavedFoodList';
 
 
 export default function SaveFoodScreen({ navigation }) {
-    useEffect(() => {
-        loadSavedFoods(); // Call the function to load saved foods when the component mounts
-      }, []);
-    
-      const loadSavedFoods = async () => {
-        try {
-          const storedFoods = await AsyncStorage.getItem('savedFoods');
-    
-          if (storedFoods) {
-            const parsedFoods = JSON.parse(storedFoods);
-            savedFoodData.splice(0, savedFoodData.length, ...parsedFoods); // Replace the contents of savedFoodData with parsedFoods
-          }
-        } catch (error) {
-          console.log('Error loading saved foods:', error);
-        }
-      };
-    const renderFlatListItem = ({ item }) => (
-      <View style={styles.foodListItem}>
-        <View style={styles.foodName}>
-          <Text>{item.name}</Text>
-        </View>
-        <View style={styles.foodCalories}>
-          <Text>{item.protein}</Text>
-        </View>
-      </View>
-    );
-
     return (
         <View style={styles.container}>
           <View style={styles.tasksWrapper}>
@@ -66,11 +23,7 @@ export default function SaveFoodScreen({ navigation }) {
             </View>
     
             <View style={styles.items}>
-              <FlatList
-                data={savedFoodData}
-                renderItem={renderFlatListItem}
-                keyExtractor={(item, index) => index.toString()}
-              />
+              <SavedFoodList></SavedFoodList>
             </View>
           </View>
         </View>
@@ -95,6 +48,7 @@ const styles = StyleSheet.create({
     },
     items: {
         marginTop: 30,
+        marginBottom: 80,
     },
     foodList: {
         marginTop: 20,
