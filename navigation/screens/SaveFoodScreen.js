@@ -2,9 +2,20 @@ import React from 'react';
 import {StyleSheet, View, Text } from 'react-native';
 import {SecondaryButton} from '../../components/Button';
 import SavedFoodList from '../../components/SavedFoodList';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function SaveFoodScreen({ navigation }) {
+
+    const clearSavedFoods = async () => {
+        try {
+          await AsyncStorage.removeItem('savedFoods');
+          console.log('Saved foods cleared successfully');
+        } catch (error) {
+          console.log('Error clearing saved foods:', error);
+        }
+      };
+
     return (
         <View style={styles.container}>
           <View style={styles.tasksWrapper}>
@@ -14,6 +25,12 @@ export default function SaveFoodScreen({ navigation }) {
               <SecondaryButton
                 title={"Create Food"}
                 onPress={() => navigation.navigate('Create Food')}
+              />
+            </View>
+            <View style={styles.addFoodButton}>
+              <SecondaryButton
+                title={"Clear Food"}
+                onPress={clearSavedFoods}
               />
             </View>
     

@@ -9,14 +9,24 @@ import { savedFoodData } from '../../data/savedFoodData';
 
 
 
-
-
-
 export default function CreateFoodScreen({ navigation }) {
     const [foodName, setFoodName] = useState('');
+    const [servingSize, setServingSize] = useState('');
     const [calories, setCalories] = useState('');
+
     const [fat, setFat] = useState('');
+    const [saturatedFat, setSaturatedFat] = useState('');
+    const [transFat, setTransFat] = useState('');
+    const [polyFat, setPolyFat] = useState('');    
+    const [monoFat, setMonoFat] = useState('');
+
+    const [cholesterol, setCholesterol] = useState('');
+    const [sodium, setSodium] = useState('');
+
     const [carbs, setCarbs] = useState('');
+    const [fiber, setFiber] = useState('');
+    const [sugar, setSugar] = useState('');
+
     const [protein, setProtein] = useState('');
 
 
@@ -25,8 +35,20 @@ export default function CreateFoodScreen({ navigation }) {
 
           // Create a new food object with values from the text input
           const newFood = {
-            name: foodName, 
-            protein: parseFloat(protein),
+            foodName: foodName, 
+            servingSize: servingSize,
+            calories: calories,
+            fat: fat,
+            saturatedFat: saturatedFat,
+            transFat: transFat,
+            polyFat: polyFat,
+            monoFat: monoFat,
+            cholesterol: cholesterol,
+            sodium: sodium,
+            carbs: carbs,
+            fiber: fiber,
+            sugar: sugar,
+            protein: protein,
           };
     
     
@@ -37,7 +59,7 @@ export default function CreateFoodScreen({ navigation }) {
           await AsyncStorage.setItem('savedFoods', JSON.stringify(savedFoodData)); // Update saved foods in AsyncStorage
     
           // Navigate back to the Foods screen or any desired screen
-          navigation.navigate('SavedFoods');
+          navigation.navigate('Saved Foods');
           console.log('Navingating back to savedFoodScreen');
     
         } catch (error) {
@@ -64,26 +86,27 @@ export default function CreateFoodScreen({ navigation }) {
             style={styles.infoInput}
             value={foodName}
             onChangeText={setFoodName}
-            keyboardType="numeric"
+            keyboardType="default"
+            placeholder="ex. Apple"
             />
         </View>
 
 
 
         <View style={styles.infoContainer}>
-            <Text style={styles.infoLabel}>Serving Size:</Text>
+            <Text style={styles.infoLabel}>Serving Size</Text>
             <TextInput
             style={styles.infoInput}
             value={calories}
-            onChangeText={setCalories}
-            keyboardType="numeric"
-            />
+            onChangeText={setServingSize}
+            keyboardType="default"
+            placeholder="ex. 1 cup"            />
         </View>
 
 
 
          <View style={styles.infoContainer}>
-            <Text style={styles.infoLabel}>Calories:</Text>
+            <Text style={styles.infoLabel}>Calories</Text>
             <TextInput
             style={styles.infoInput}
             value={calories}
@@ -94,123 +117,101 @@ export default function CreateFoodScreen({ navigation }) {
 
 
         <View style={styles.infoContainer}>
-            <Text style={styles.infoLabel}>Fat:</Text>
+            <Text style={styles.infoLabel}>Fat (g)</Text>
             <TextInput
                 style={styles.infoInput}
                 value={fat}
                 onChangeText={setFat}
                 keyboardType="numeric"
             />
-            <Text>g</Text>
         </View>
-        <View style={styles.infoSubContainer}>
-            <Text style={styles.infoSubLabel}>Saturated Fat:</Text>
+        <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel}>Saturated Fat (g)</Text>
             <TextInput
-                style={styles.infoSubInput}
+                style={styles.infoInput}
                 value={fat}
-                onChangeText={setFat}
+                onChangeText={setSaturatedFat}
                 keyboardType="numeric"
             />
-            <Text>g</Text>
         </View>
-        <View style={styles.infoSubContainer}>
-            <Text style={styles.infoSubLabel}>Trans Fat:</Text>
+        <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel}>Trans Fat (g)</Text>
             <TextInput
-                style={styles.infoSubInput}
+                style={styles.infoInput}
                 value={fat}
-                onChangeText={setFat}
+                onChangeText={setTransFat}
                 keyboardType="numeric"
             />
-            <Text>g</Text>
         </View>
-        <View style={styles.infoSubContainer}>
-            <Text style={styles.infoSubLabel}>Polyunsaturated Fat:</Text>
+        <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel}>Polyunsaturated Fat (g)</Text>
             <TextInput
-                style={styles.infoSubInput}
+                style={styles.infoInput}
                 value={fat}
-                onChangeText={setFat}
-                placeholder="Enter fat"
+                onChangeText={setPolyFat}
                 keyboardType="numeric"
             />
-            <Text>g</Text>
         </View>
-        <View style={styles.infoSubContainer}>
-            <Text style={styles.infoSubLabel}>Monounsaturated Fat:</Text>
+        <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel}>Monounsaturated Fat (g)</Text>
             <TextInput
-                style={styles.infoSubInput}
+                style={styles.infoInput}
                 value={fat}
-                onChangeText={setFat}
-                placeholder="Monounsaturated fat"
+                onChangeText={setMonoFat}
                 keyboardType="numeric"
             />
-            <Text>g</Text>
         </View>
 
 
         <View style={styles.infoContainer}>
-            <Text style={styles.infoLabel}>Cholesterol</Text>
+            <Text style={styles.infoLabel}>Cholesterol (mg)</Text>
             <TextInput
                 style={styles.infoInput}
                 value={carbs}
-                onChangeText={setCarbs}
-                placeholder="Enter carbs"
+                onChangeText={setCholesterol}
                 keyboardType="numeric"
             />
-            <Text>mg</Text>
         </View>
 
         <View style={styles.infoContainer}>
-            <Text style={styles.infoLabel}>Sodium</Text>
+            <Text style={styles.infoLabel}>Sodium (mg)</Text>
             <TextInput
                 style={styles.infoInput}
                 value={carbs}
-                onChangeText={setCarbs}
-                placeholder="Enter carbs"
+                onChangeText={setSodium}
                 keyboardType="numeric"
             />
-            <Text>mg</Text>
         </View>
 
 
 
         <View style={styles.infoContainer}>
-            <Text style={styles.infoLabel}>Total Carbohydrate</Text>
+            <Text style={styles.infoLabel}>Total Carbohydrate (mg)</Text>
             <TextInput
                 style={styles.infoInput}
                 value={carbs}
                 onChangeText={setCarbs}
-                placeholder="Enter carbs"
                 keyboardType="numeric"
             />
-            <Text>g</Text>
         </View>
-        <View style={styles.infoSubContainer}>
-            <Text style={styles.infoSubLabel}>Dietary Fiber:</Text>
+        <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel}>Dietary Fiber (g)</Text>
             <TextInput
-                style={styles.infoSubInput}
+                style={styles.infoInput}
                 value={fat}
-                onChangeText={setFat}
-                placeholder="Monounsaturated fat"
+                onChangeText={setFiber}
                 keyboardType="numeric"
             />
-            <Text>g</Text>
         </View>
-        <View style={styles.infoSubContainer}>
-            <Text style={styles.infoSubLabel}>Sugar:</Text>
+        <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel}>Sugar (g)</Text>
             <TextInput
-                style={styles.infoSubInput}
+                style={styles.infoInput}
                 value={fat}
-                onChangeText={setFat}
-                placeholder="Monounsaturated fat"
+                onChangeText={setSugar}
                 keyboardType="numeric"
             />
-            <Text>g</Text>
         </View>
-
-
-
-
-
 
 
         <View style={styles.infoContainer}>
@@ -219,10 +220,8 @@ export default function CreateFoodScreen({ navigation }) {
                 style={styles.infoInput}
                 value={protein}
                 onChangeText={setProtein}
-                placeholder="Enter protein"
                 keyboardType="numeric"
             />
-            <Text>g</Text>
         </View>
 
 
@@ -235,7 +234,7 @@ export default function CreateFoodScreen({ navigation }) {
 
         <SecondaryButton 
             title={"Cancel"}
-            onPress={() => navigation.navigate('SavedFoods')}
+            onPress={() => navigation.navigate('Saved Foods')}
         ></SecondaryButton> 
         </View>
     </ScrollView>
@@ -252,47 +251,43 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 80,
-        // paddingBottom: 80,
-        paddingHorizontal: 20,
+        // paddingHorizontal: 20,
+        backgroundColor: '#E8EAED',
     },
     label: {
       fontSize: 20,
       fontWeight: 'bold',
       marginBottom: 20,
+      textAlign: 'center',
     },
+
+
     infoContainer: {
       flexDirection: 'row',
-      marginBottom: 10,
+      backgroundColor: '#FFF',
+      borderWidth: 1,
+      borderColor: '#ccc',
+      paddingHorizontal: 20,
     },
-    infoSubContainer: {
-        flexDirection: 'row',
-        marginBottom: 10,
-        marginLeft: 20,
-      },
+
+
     infoLabel: {
-      flex: 1,
+    //   flex: 1,
       fontSize: 16,
+      paddingTop: 5,
+
     },
-    infoSubLabel: {
-        flex: 1,
-        fontSize: 12,
-      },
+
+
+    
     infoInput: {
       flex: 1,
       fontSize: 16,
-      borderWidth: 1,
-      borderColor: '#ccc',
+    //   borderWidth: 1,
+    // borderColor: '#ccc',
       paddingHorizontal: 10,
       borderRadius: 5,
-      height: 30
+      height: 30,
+      textAlign: 'right'
     },
-    infoSubInput: {
-        flex: 1,
-        fontSize: 14,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        paddingHorizontal: 10,
-        borderRadius: 5,
-        height: 23
-      },
   });
