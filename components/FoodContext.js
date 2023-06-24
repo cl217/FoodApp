@@ -17,7 +17,7 @@ export const FoodProvider = ({ children }) => {
 
         const storedFoodLog = await AsyncStorage.getItem("savedFoodLog");
         if (storedFoodLog != null) {
-          setFoodLog(JSON.parse(storedFoods));
+          setFoodLog(JSON.parse(storedFoodLog));
         }
       } catch (error) {
         console.log("Error fetching foods:", error);
@@ -37,8 +37,50 @@ export const FoodProvider = ({ children }) => {
     }
   };
 
+  const addToFoodLog = async (foodsToAdd, date, meal) => {
+    try {
+      const existingFoodLogForDate = foodLog.find((log) => log.date === date);
+      if (existingFoodLogForDate) {
+        // FoodLog with the specified date already exists
+        const updatedFoodLog = foodLog.map((log) => {
+          if (log.date === date) {
+            // Update the specific meal (breakfast, lunch, dinner) with the new food item
+            const updatedMeal = [...log[meal], foodsToAdd];
+            return { ...log, [meal]: updatedMeal };
+          }
+          return log;
+        });
+
+        await AsyncStorage.setItem(
+          "savedFoodLog",
+          JSON.stringify(updatedFoodLog)
+        );
+        setFoodLog(updatedFoodLog);
+      } else {
+        // FoodLog with the specified date doesn't exist, create a new entry
+        const newFoodLog = {
+          date,
+          Breakfast: [],
+          Lunch: [],
+          Dinner: [],
+          Snack: [],
+        };
+        newFoodLog[meal] = [foodsToAdd];
+
+        const updatedFoodLog = [...foodLog, newFoodLog];
+        await AsyncStorage.setItem(
+          "savedFoodLog",
+          JSON.stringify(updatedFoodLog)
+        );
+        setFoodLog(updatedFoodLog);
+      }
+    } catch (error) {
+      console.log("Error adding to food log:", error);
+    }
+  };
+
   return (
-    <FoodContext.Provider value={{ foods, addFood }}>
+    <FoodContext.Provider value={{ foods, foodLog, addFood, addToFoodLog }}>
       {children}
     </FoodContext.Provider>
   );

@@ -1,6 +1,8 @@
 import * as React from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
 import Meal from "../../components/Meal";
+import { SecondaryButton } from "../../components/Button";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LogFoodScreen({ navigation }) {
   const date = new Date();
@@ -11,10 +13,27 @@ export default function LogFoodScreen({ navigation }) {
     day: "numeric",
   });
 
+  const clearSavedFoodLog = async () => {
+    try {
+      await AsyncStorage.removeItem("savedFoodLog");
+      console.log("Saved food Log cleared");
+    } catch (error) {
+      console.log("Error clearing saved foods:", error);
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.tasksWrapper}>
         <Text style={styles.sectionTitle}>{dateString}</Text>
+
+        <View style={styles.addFoodButton}>
+          <SecondaryButton
+            title={"Clear Food Log"}
+            onPress={clearSavedFoodLog}
+          />
+        </View>
+
         <View style={styles.items}>
           <Meal text={"Breakfast"} date={dateString}></Meal>
           <Meal text={"Lunch"} date={dateString}></Meal>

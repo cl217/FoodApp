@@ -14,6 +14,7 @@ import TopNavigationHeader from "../../components/TopNavigationHeader";
 export default function AddFoodScreen(props) {
   const { foods } = useContext(FoodContext);
   const navigation = useNavigation();
+  const { addToFoodLog } = useContext(FoodContext);
 
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -32,7 +33,18 @@ export default function AddFoodScreen(props) {
       setSelectedItems([...selectedItems, itemKey]);
     }
   };
-  const handleSaveAddFoodItem = (item) => {
+
+  const handleSaveAddFoodItem = () => {
+    console.log(props.route.params.date + " " + props.route.params.meal);
+    selectedItems.map((foodName) => {
+      console.log(foodName);
+    });
+
+    addToFoodLog(
+      selectedItems,
+      props.route.params.date,
+      props.route.params.meal
+    );
     navigation.navigate("Log Food");
   };
 

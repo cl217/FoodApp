@@ -1,15 +1,46 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { PrimaryButton, SecondaryButton } from "../components/Button";
 import foodListData from "../data/foodListData";
 import { useNavigation } from "@react-navigation/native";
+import { FoodContext } from "./FoodContext";
 
 const Meal = (props) => {
   const navigation = useNavigation();
+  const { foodLog } = useContext(FoodContext);
+  const [foodList, setFoodList] = useState([]);
 
   const handleNavigateToAddFood = () => {
-    navigation.navigate("Add Food", { date: props.date });
+    navigation.navigate("Add Food", { date: props.date, meal: props.text });
   };
+
+  useEffect(() => {
+    // Fetch the food list based on the date and meal
+
+    console.log("foodlog:");
+    console.log(foodLog);
+
+    const fetchFoodList = () => {
+      if (foodLog && foodLog.length > 0) {
+        const { date, text: meal } = props;
+        const selectedLog = foodLog.find((log) => log.date === date);
+        console.log("selectedLog:");
+        console.log(selectedLog);
+
+        if (selectedLog && selectedLog[meal]) {
+          setFoodList(selectedLog[meal]);
+          console.log("selected meal:");
+          console.log(selectedLog[meal]);
+        } else {
+          setFoodList([]);
+        }
+      } else {
+        setFoodList([]);
+      }
+    };
+
+    fetchFoodList();
+  }, [foodLog, props]);
 
   return (
     <View style={styles.meal}>
@@ -29,14 +60,11 @@ const Meal = (props) => {
       </View>
 
       <View>
-        {foodListData.map((item, index) => {
+        {foodList.map((item, index) => {
           return (
-            <View style={styles.foodListItem}>
+            <View style={styles.foodListItem} key={index}>
               <View style={styles.foodName}>
-                <Text>{item.name}</Text>
-              </View>
-              <View style={styles.foodCalories}>
-                <Text>{item.calories}</Text>
+                <Text>{item}</Text>
               </View>
             </View>
           );
