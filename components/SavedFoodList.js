@@ -6,17 +6,22 @@ import { savedFoodData } from '../data/savedFoodData'
 
 const SavedFoodList = (props) => {
 
+
+
+
     const renderFlatListItem = ({ item }) => (
         <View style={styles.foodListItem}>
           <View style={styles.foodName}>
-            <Text>{item.name}</Text>
+            <Text>{item.foodName}</Text>
           </View>
           <View style={styles.foodCalories}>
-            <Text>{item.protein}</Text>
+            <Text>{item.calories}</Text>
           </View>
         </View>
       );
     
+
+      console.log("refresh")
 
     return (
         <FlatList

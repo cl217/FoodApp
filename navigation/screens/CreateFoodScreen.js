@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, StyleSheet, KeyboardAvoidingView, ScrollView} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import CustomPicker from 'react-native-custom-picker';
@@ -7,12 +7,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { savedFoodData } from '../../data/savedFoodData';
 import { Header } from 'react-navigation-stack';
 import { Ionicons } from '@expo/vector-icons';
-
+import TopNavigationHeader from '../../components/TopNavigationHeader';
+import { foodListUpdated } from '../../data/foodListUpdated';
+import { FoodContext } from '../../components/FoodContext';
 
 
 
 
 export default function CreateFoodScreen({ navigation }) {
+
+
+
     const [foodName, setFoodName] = useState('');
     const [servingSize, setServingSize] = useState('');
     const [calories, setCalories] = useState('');
@@ -33,7 +38,11 @@ export default function CreateFoodScreen({ navigation }) {
     const [protein, setProtein] = useState('');
 
 
+    const { addFood } = useContext(FoodContext);
+
+
     const handleSaveFood = async () => {
+        console.log("saving food")
         try {
 
           // Create a new food object with values from the text input
@@ -54,14 +63,8 @@ export default function CreateFoodScreen({ navigation }) {
             protein: protein,
           };
     
-    
-          // Add the new food object to the saved foods array
-          savedFoodData.push(newFood); // Add the new food to savedFoodData array
-    
-          // Save the updated saved foods array back to AsyncStorage
-          await AsyncStorage.setItem('savedFoods', JSON.stringify(savedFoodData)); // Update saved foods in AsyncStorage
-    
-          // Navigate back to the Foods screen or any desired screen
+          addFood(newFood);
+          
           navigation.navigate('Saved Foods');
           console.log('Navingating back to savedFoodScreen');
     
@@ -82,19 +85,7 @@ export default function CreateFoodScreen({ navigation }) {
     >
 
 
-
-    <View style={styles.header}>
-          <Ionicons name="arrow-back" size={24} color="black" onPress={() => navigation.goBack()}/>
-          
-          <Text style={styles.label}>Nutrition Facts</Text>
-
-          <Ionicons
-            name="checkmark"
-            size={24}
-            color="black"
-            onPress={handleSaveFood}
-          />
-    </View>
+    <TopNavigationHeader title="Nutrition facts" onSave={handleSaveFood} />
 
     <ScrollView>
 
@@ -115,7 +106,7 @@ export default function CreateFoodScreen({ navigation }) {
             <Text style={styles.infoLabel}>Serving Size</Text>
             <TextInput
             style={styles.infoInput}
-            value={calories}
+            value={servingSize}
             onChangeText={setServingSize}
             keyboardType="default"
             placeholder="ex. 1 cup"            />
@@ -147,7 +138,7 @@ export default function CreateFoodScreen({ navigation }) {
             <Text style={styles.infoLabel}>Saturated Fat (g)</Text>
             <TextInput
                 style={styles.infoInput}
-                value={fat}
+                value={saturatedFat}
                 onChangeText={setSaturatedFat}
                 keyboardType="numeric"
             />
@@ -156,7 +147,7 @@ export default function CreateFoodScreen({ navigation }) {
             <Text style={styles.infoLabel}>Trans Fat (g)</Text>
             <TextInput
                 style={styles.infoInput}
-                value={fat}
+                value={transFat}
                 onChangeText={setTransFat}
                 keyboardType="numeric"
             />
@@ -165,7 +156,7 @@ export default function CreateFoodScreen({ navigation }) {
             <Text style={styles.infoLabel}>Polyunsaturated Fat (g)</Text>
             <TextInput
                 style={styles.infoInput}
-                value={fat}
+                value={polyFat}
                 onChangeText={setPolyFat}
                 keyboardType="numeric"
             />
@@ -174,7 +165,7 @@ export default function CreateFoodScreen({ navigation }) {
             <Text style={styles.infoLabel}>Monounsaturated Fat (g)</Text>
             <TextInput
                 style={styles.infoInput}
-                value={fat}
+                value={monoFat}
                 onChangeText={setMonoFat}
                 keyboardType="numeric"
             />
@@ -185,7 +176,7 @@ export default function CreateFoodScreen({ navigation }) {
             <Text style={styles.infoLabel}>Cholesterol (mg)</Text>
             <TextInput
                 style={styles.infoInput}
-                value={carbs}
+                value={cholesterol}
                 onChangeText={setCholesterol}
                 keyboardType="numeric"
             />
@@ -195,7 +186,7 @@ export default function CreateFoodScreen({ navigation }) {
             <Text style={styles.infoLabel}>Sodium (mg)</Text>
             <TextInput
                 style={styles.infoInput}
-                value={carbs}
+                value={sodium}
                 onChangeText={setSodium}
                 keyboardType="numeric"
             />
@@ -216,7 +207,7 @@ export default function CreateFoodScreen({ navigation }) {
             <Text style={styles.infoLabel}>Dietary Fiber (g)</Text>
             <TextInput
                 style={styles.infoInput}
-                value={fat}
+                value={fiber}
                 onChangeText={setFiber}
                 keyboardType="numeric"
             />
@@ -225,7 +216,7 @@ export default function CreateFoodScreen({ navigation }) {
             <Text style={styles.infoLabel}>Sugar (g)</Text>
             <TextInput
                 style={styles.infoInput}
-                value={fat}
+                value={sugar}
                 onChangeText={setSugar}
                 keyboardType="numeric"
             />

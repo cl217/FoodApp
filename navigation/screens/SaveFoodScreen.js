@@ -1,11 +1,26 @@
-import React from 'react';
-import {StyleSheet, View, Text } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import {StyleSheet, View, Text, FlatList } from 'react-native';
 import {SecondaryButton} from '../../components/Button';
-import SavedFoodList from '../../components/SavedFoodList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { savedFoodData } from '../../data/savedFoodData';
+import { foodListUpdated } from '../../data/foodListUpdated';
+import { FoodContext } from '../../components/FoodContext';
 
 
 export default function SaveFoodScreen({ navigation }) {
+  const { foods } = useContext(FoodContext);
+
+    const renderFlatListItem = ({ item }) => (
+        <View style={styles.foodListItem}>
+          <View style={styles.foodName}>
+            <Text>{item.foodName}</Text>
+          </View>
+          <View style={styles.foodCalories}>
+            <Text>{item.calories}</Text>
+          </View>
+        </View>
+      );
+    
 
     const clearSavedFoods = async () => {
         try {
@@ -35,7 +50,11 @@ export default function SaveFoodScreen({ navigation }) {
             </View>
     
             <View style={styles.items}>
-              <SavedFoodList></SavedFoodList>
+                <FlatList
+                    data={foods}
+                    renderItem={renderFlatListItem}
+                    keyExtractor={(item, index) => index.toString()}
+                />
             </View>
           </View>
         </View>
