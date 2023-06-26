@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { PrimaryButton, SecondaryButton } from "../components/Button";
 import foodListData from "../data/foodListData";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { FoodContext } from "./FoodContext";
 
 const Meal = (props) => {
@@ -14,6 +14,54 @@ const Meal = (props) => {
   const handleNavigateToAddFood = () => {
     navigation.navigate("Add Food", { date: props.date, meal: props.text });
   };
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     const fetchFoodList = () => {
+  //       console.log("ALL SAVED FOODS: ");
+  //       foods.map((item) => {
+  //         console.log(item.foodName + "(End)");
+  //       });
+  //       if (foodLog && foodLog.length > 0) {
+  //         const { date, text: meal } = props;
+  //         const selectedLog = foodLog.find((log) => log.date === date);
+  //         console.log("selectedLog:");
+  //         console.log(selectedLog);
+
+  //         if (selectedLog && selectedLog[meal]) {
+  //           getFoodList = [];
+
+  //           console.log("selectedLog[meal]: " + selectedLog[meal]);
+  //           console.log("length:" + selectedLog[meal].length);
+  //           selectedLog[meal].map((item) => {
+  //             console.log("loop item: " + item + "(End)");
+  //             const findFood = foods.find(
+  //               (food) => food.foodName === item.toString()
+  //             );
+  //             console.log("food found: " + findFood);
+  //             if (findFood) {
+  //               getFoodList.push(findFood);
+  //             } else {
+  //               const unfoundFood = {
+  //                 foodName: item.toString(),
+  //                 calories: "no data",
+  //               };
+  //               getFoodList.push(unfoundFood);
+  //             }
+  //           });
+
+  //           setFoodList(getFoodList);
+  //         } else {
+  //           setFoodList([]);
+  //         }
+  //       } else {
+  //         setFoodList([]);
+  //       }
+  //     };
+
+  //     fetchFoodList();
+  //   }, [foodLog, props])
+  // );
 
   useEffect(() => {
     // Fetch the food list based on the date and meal
@@ -42,6 +90,12 @@ const Meal = (props) => {
             console.log("food found: " + findFood);
             if (findFood) {
               getFoodList.push(findFood);
+            } else {
+              const unfoundFood = {
+                foodName: item.toString(),
+                calories: "no data",
+              };
+              getFoodList.push(unfoundFood);
             }
           });
 
@@ -55,7 +109,7 @@ const Meal = (props) => {
     };
 
     fetchFoodList();
-  }, [foodLog, props]);
+  }, [foodLog, foods, props]);
 
   return (
     <View style={styles.meal}>

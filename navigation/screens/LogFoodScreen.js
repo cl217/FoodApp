@@ -1,8 +1,9 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
 import Meal from "../../components/Meal";
 import { SecondaryButton } from "../../components/Button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function LogFoodScreen({ navigation }) {
   const date = new Date();
@@ -36,9 +37,9 @@ export default function LogFoodScreen({ navigation }) {
 
         <View style={styles.items}>
           <Meal text={"Breakfast"} date={dateString}></Meal>
-          <Meal text={"Lunch"} date={dateString}></Meal>
+          {/* <Meal text={"Lunch"} date={dateString}></Meal>
           <Meal text={"Dinner"} date={dateString}></Meal>
-          <Meal text={"Snacks"} date={dateString}></Meal>
+          <Meal text={"Snacks"} date={dateString}></Meal> */}
         </View>
       </View>
     </ScrollView>
