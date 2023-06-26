@@ -1,21 +1,32 @@
 import React, { useContext } from "react";
-import { StyleSheet, View, Text, FlatList } from "react-native";
+import { StyleSheet, View, Text, FlatList, Button } from "react-native";
 import { SecondaryButton } from "../../components/Button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FoodContext } from "../../components/FoodContext";
+import { Swipeable } from "react-native-gesture-handler";
 
 export default function SaveFoodScreen({ navigation }) {
-  const { foods } = useContext(FoodContext);
+  const { foods, removeFood } = useContext(FoodContext);
 
-  const renderFlatListItem = ({ item }) => (
-    <View style={styles.foodListItem}>
-      <View style={styles.foodName}>
-        <Text>{item.foodName}</Text>
+  let row = [];
+  let prevOpenedRow;
+
+  const renderFlatListItem = ({ item, index }, onDelete) => (
+    <Swipeable
+      renderRightActions={(progress, dragX) => renderRightView(onDelete)}
+      onSwipeableOpen={() => closeRow(index)}
+      ref={(ref) => (row[index] = ref)}
+      rightOpenValue={-100}
+    >
+      <View style={styles.foodListItem}>
+        <View style={styles.foodName}>
+          <Text>{item.foodName}</Text>
+        </View>
+        <View style={styles.foodCalories}>
+          <Text>{item.calories}</Text>
+        </View>
       </View>
-      <View style={styles.foodCalories}>
-        <Text>{item.calories}</Text>
-      </View>
-    </View>
+    </Swipeable>
   );
 
   const clearSavedFoods = async () => {
@@ -25,6 +36,35 @@ export default function SaveFoodScreen({ navigation }) {
     } catch (error) {
       console.log("Error clearing saved foods:", error);
     }
+  };
+
+  const closeRow = (index) => {
+    console.log("closerow");
+    if (prevOpenedRow && prevOpenedRow !== row[index]) {
+      prevOpenedRow.close();
+    }
+    prevOpenedRow = row[index];
+  };
+
+  const renderRightView = (onDeleteHandler) => {
+    return (
+      <View
+        style={{
+          margin: 0,
+          alignContent: "center",
+          justifyContent: "center",
+          width: 70,
+        }}
+      >
+        <Button
+          color="red"
+          onPress={(e) => {
+            onDeleteHandler(e);
+          }}
+          title="DELETE"
+        ></Button>
+      </View>
+    );
   };
 
   return (
@@ -45,7 +85,13 @@ export default function SaveFoodScreen({ navigation }) {
         <View style={styles.items}>
           <FlatList
             data={foods}
-            renderItem={renderFlatListItem}
+            renderItem={(rowItem) =>
+              renderFlatListItem(rowItem, () => {
+                console.log("deleting item: ", rowItem.item.foodName);
+                removeFood(rowItem.item.foodName);
+                row[rowItem.index].close();
+              })
+            }
             keyExtractor={(item, index) => index.toString()}
           />
         </View>

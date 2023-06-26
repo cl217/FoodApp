@@ -39,9 +39,9 @@ export const FoodProvider = ({ children }) => {
 
   const removeFood = async (food) => {
     try {
-      const updatedFoods = foods.filter((item) => item !== food);
-      await AsyncStorage.setItem("savedFoods", JSON.stringify(updatedFoods));
+      const updatedFoods = foods.filter((item) => item.foodName !== food);
       setFoods(updatedFoods);
+      await AsyncStorage.setItem("savedFoods", JSON.stringify(updatedFoods));
     } catch (error) {
       console.log("Error removing food:", error);
     }
@@ -90,7 +90,9 @@ export const FoodProvider = ({ children }) => {
   };
 
   return (
-    <FoodContext.Provider value={{ foods, foodLog, addFood, addToFoodLog }}>
+    <FoodContext.Provider
+      value={{ foods, foodLog, addFood, addToFoodLog, removeFood }}
+    >
       {children}
     </FoodContext.Provider>
   );
