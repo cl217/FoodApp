@@ -9,6 +9,7 @@ const Meal = (props) => {
   const navigation = useNavigation();
   const { foodLog } = useContext(FoodContext);
   const [foodList, setFoodList] = useState([]);
+  const { foods } = useContext(FoodContext);
 
   const handleNavigateToAddFood = () => {
     navigation.navigate("Add Food", { date: props.date, meal: props.text });
@@ -16,11 +17,12 @@ const Meal = (props) => {
 
   useEffect(() => {
     // Fetch the food list based on the date and meal
-
-    console.log("foodlog:");
-    console.log(foodLog);
-
     const fetchFoodList = () => {
+      console.log("ALL SAVED FOODS: ");
+      console.log(foods);
+      foods.map((item) => {
+        console.log(item.foodName + "(End)");
+      });
       if (foodLog && foodLog.length > 0) {
         const { date, text: meal } = props;
         const selectedLog = foodLog.find((log) => log.date === date);
@@ -28,9 +30,22 @@ const Meal = (props) => {
         console.log(selectedLog);
 
         if (selectedLog && selectedLog[meal]) {
-          setFoodList(selectedLog[meal]);
-          console.log("selected meal:");
-          console.log(selectedLog[meal]);
+          getFoodList = [];
+
+          console.log("selectedLog[meal]: " + selectedLog[meal]);
+          console.log("length:" + selectedLog[meal].length);
+          selectedLog[meal].map((item) => {
+            console.log("loop item: " + item + "(End)");
+            const findFood = foods.find(
+              (food) => food.foodName === item.toString()
+            );
+            console.log("food found: " + findFood);
+            if (findFood) {
+              getFoodList.push(findFood);
+            }
+          });
+
+          setFoodList(getFoodList);
         } else {
           setFoodList([]);
         }
@@ -64,7 +79,10 @@ const Meal = (props) => {
           return (
             <View style={styles.foodListItem} key={index}>
               <View style={styles.foodName}>
-                <Text>{item}</Text>
+                <Text>{item.foodName}</Text>
+              </View>
+              <View style={styles.foodCalories}>
+                <Text>{item.calories}</Text>
               </View>
             </View>
           );

@@ -37,6 +37,16 @@ export const FoodProvider = ({ children }) => {
     }
   };
 
+  const removeFood = async (food) => {
+    try {
+      const updatedFoods = foods.filter((item) => item !== food);
+      await AsyncStorage.setItem("savedFoods", JSON.stringify(updatedFoods));
+      setFoods(updatedFoods);
+    } catch (error) {
+      console.log("Error removing food:", error);
+    }
+  };
+
   const addToFoodLog = async (foodsToAdd, date, meal) => {
     try {
       const existingFoodLogForDate = foodLog.find((log) => log.date === date);
@@ -65,7 +75,7 @@ export const FoodProvider = ({ children }) => {
           Dinner: [],
           Snack: [],
         };
-        newFoodLog[meal] = [foodsToAdd];
+        newFoodLog[meal] = [...newFoodLog[meal], ...foodsToAdd];
 
         const updatedFoodLog = [...foodLog, newFoodLog];
         await AsyncStorage.setItem(
