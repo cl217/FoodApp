@@ -47,6 +47,35 @@ export const FoodProvider = ({ children }) => {
     }
   };
 
+  const removeFromFoodLog = async (foodsToRemove, date, meal) => {
+    try {
+      const existingFoodLogForDate = foodLog.find((log) => log.date === date);
+      if (existingFoodLogForDate) {
+        // FoodLog with the specified date exists
+        const updatedFoodLog = foodLog.map((log) => {
+          if (log.date === date) {
+            // Remove the food from the specified meal (breakfast, lunch, dinner)
+            const updatedMeal = log[meal].filter(
+              (food) => !foodsToRemove.includes(food)
+            );
+            return { ...log, [meal]: updatedMeal };
+          }
+          return log;
+        });
+
+        console.log("updatedFoodLog");
+        console.log(updatedFoodLog);
+        await AsyncStorage.setItem(
+          "savedFoodLog",
+          JSON.stringify(updatedFoodLog)
+        );
+        setFoodLog(updatedFoodLog);
+      }
+    } catch (error) {
+      console.log("Error removing from food log:", error);
+    }
+  };
+
   const addToFoodLog = async (foodsToAdd, date, meal) => {
     try {
       const existingFoodLogForDate = foodLog.find((log) => log.date === date);
@@ -55,7 +84,7 @@ export const FoodProvider = ({ children }) => {
         const updatedFoodLog = foodLog.map((log) => {
           if (log.date === date) {
             // Update the specific meal (breakfast, lunch, dinner) with the new food item
-            const updatedMeal = [...log[meal], foodsToAdd];
+            const updatedMeal = [...log[meal], ...foodsToAdd];
             return { ...log, [meal]: updatedMeal };
           }
           return log;
@@ -91,7 +120,14 @@ export const FoodProvider = ({ children }) => {
 
   return (
     <FoodContext.Provider
-      value={{ foods, foodLog, addFood, addToFoodLog, removeFood }}
+      value={{
+        foods,
+        foodLog,
+        addFood,
+        addToFoodLog,
+        removeFood,
+        removeFromFoodLog,
+      }}
     >
       {children}
     </FoodContext.Provider>
