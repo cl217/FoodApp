@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import TopNavigationHeader from "../../components/TopNavigationHeader";
 import { FoodContext } from "../../components/FoodContext";
+import { SecondaryButton } from "../../components/Button";
 
 export default function CreateFoodScreen({ navigation, route }) {
   const [editCreate, setEditCreate] = useState("Create");
@@ -97,6 +98,15 @@ export default function CreateFoodScreen({ navigation, route }) {
     }
   };
 
+  const handleScanNutritionLabel = () => {
+    console.log("scan nutrition label");
+  };
+
+  const handleScanBarcode = async () => {
+    console.log("handle scan barcode");
+    navigation.navigate("Barcode Scanner");
+  };
+
   const keyboardAvoidingBehavior =
     Platform.OS === "ios" ? "padding" : undefined;
 
@@ -109,6 +119,15 @@ export default function CreateFoodScreen({ navigation, route }) {
       <TopNavigationHeader title="Nutrition facts" onSave={handleSaveFood} />
 
       <ScrollView>
+        <View style={styles.addFoodButton}>
+          <SecondaryButton
+            title={"Scan nutrition label"}
+            onPress={handleScanNutritionLabel}
+          />
+        </View>
+        <View style={styles.addFoodButton}>
+          <SecondaryButton title={"Add barcode"} onPress={handleScanBarcode} />
+        </View>
         <View style={styles.infoContainer}>
           <Text style={styles.infoLabel}>Name</Text>
           <TextInput
@@ -244,19 +263,6 @@ export default function CreateFoodScreen({ navigation, route }) {
             keyboardType="numeric"
           />
         </View>
-
-        {/* <View style={styles.addFoodButton}>
-        <SecondaryButton 
-            title={"Create Food"}
-            onPress={handleSaveFood}        
-        ></SecondaryButton> 
-
-
-        <SecondaryButton 
-            title={"Cancel"}
-            onPress={() => navigation.navigate('Saved Foods')}
-        ></SecondaryButton> 
-        </View> */}
       </ScrollView>
     </KeyboardAvoidingView>
   );
