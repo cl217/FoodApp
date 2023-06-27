@@ -1,9 +1,13 @@
-import React, { useEffect } from "react";
-import { StyleSheet, View, Text, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View, Text, ScrollView, Modal } from "react-native";
 import Meal from "../../components/Meal";
 import { SecondaryButton } from "../../components/Button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 export default function LogFoodScreen({ navigation }) {
   const date = new Date();
@@ -13,6 +17,22 @@ export default function LogFoodScreen({ navigation }) {
     month: "long",
     day: "numeric",
   });
+
+  const [isDatePickerVisible, setDatePickerVisible] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const showDatePicker = () => {
+    setDatePickerVisible(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisible(false);
+  };
+
+  const handleConfirm = (date) => {
+    setSelectedDate(date);
+    hideDatePicker();
+  };
 
   const clearSavedFoodLog = async () => {
     try {
@@ -26,7 +46,20 @@ export default function LogFoodScreen({ navigation }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.tasksWrapper}>
-        <Text style={styles.sectionTitle}>{dateString}</Text>
+        <View style={styles.header}>
+          <Ionicons name="chevron-back-outline" size={24} color="black" />
+          <TouchableOpacity onPress={showDatePicker}>
+            <Text style={styles.label}>{dateString}</Text>
+          </TouchableOpacity>
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+            themeVariant={"light"}
+          />
+          <Ionicons name="chevron-forward-outline" size={24} color="black" />
+        </View>
 
         <View style={styles.addFoodButton}>
           <SecondaryButton
@@ -61,5 +94,33 @@ const styles = StyleSheet.create({
   },
   items: {
     marginTop: 30,
+  },
+
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    // alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: "#CCCCCC",
+    marginBottom: 20,
+  },
+
+  label: {
+    fontSize: 20,
+    fontWeight: "bold",
+    //   marginBottom: 20,
+    textAlign: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: 20,
   },
 });
