@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { StyleSheet, View, Text, Button } from "react-native";
 import { PrimaryButton, SecondaryButton } from "../components/Button";
-import foodListData from "../data/foodListData";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { FoodContext } from "./FoodContext";
 import { Swipeable } from "react-native-gesture-handler";

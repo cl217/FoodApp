@@ -10,16 +10,19 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 export default function LogFoodScreen({ navigation }) {
-  const date = new Date();
-  const dateString = date.toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [dateString, setDateString] = useState("");
+
+  useEffect(() => {
+    const formattedDate = selectedDate.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    setDateString(formattedDate);
+  }, [selectedDate]);
 
   const showDatePicker = () => {
     setDatePickerVisible(true);
@@ -32,6 +35,18 @@ export default function LogFoodScreen({ navigation }) {
   const handleConfirm = (date) => {
     setSelectedDate(date);
     hideDatePicker();
+  };
+
+  const backDate = () => {
+    const nextDay = new Date(selectedDate);
+    nextDay.setDate(nextDay.getDate() - 1);
+    setSelectedDate(nextDay);
+  };
+
+  const forwardDate = () => {
+    const nextDay = new Date(selectedDate);
+    nextDay.setDate(nextDay.getDate() + 1);
+    setSelectedDate(nextDay);
   };
 
   const clearSavedFoodLog = async () => {
@@ -47,18 +62,23 @@ export default function LogFoodScreen({ navigation }) {
     <ScrollView style={styles.container}>
       <View style={styles.tasksWrapper}>
         <View style={styles.header}>
-          <Ionicons name="chevron-back-outline" size={24} color="black" />
+          <TouchableOpacity onPress={backDate}>
+            <Ionicons name="chevron-back-outline" size={24} color="black" />
+          </TouchableOpacity>
           <TouchableOpacity onPress={showDatePicker}>
             <Text style={styles.label}>{dateString}</Text>
           </TouchableOpacity>
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="date"
+            date={selectedDate}
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
             themeVariant={"light"}
           />
-          <Ionicons name="chevron-forward-outline" size={24} color="black" />
+          <TouchableOpacity onPress={forwardDate}>
+            <Ionicons name="chevron-forward-outline" size={24} color="black" />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.addFoodButton}>
@@ -70,9 +90,9 @@ export default function LogFoodScreen({ navigation }) {
 
         <View style={styles.items}>
           <Meal text={"Breakfast"} date={dateString}></Meal>
-          {/* <Meal text={"Lunch"} date={dateString}></Meal>
+          <Meal text={"Lunch"} date={dateString}></Meal>
           <Meal text={"Dinner"} date={dateString}></Meal>
-          <Meal text={"Snacks"} date={dateString}></Meal> */}
+          <Meal text={"Snacks"} date={dateString}></Meal>
         </View>
       </View>
     </ScrollView>
