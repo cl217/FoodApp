@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,8 @@ import {
 import TopNavigationHeader from "../../components/TopNavigationHeader";
 import { FoodContext } from "../../components/FoodContext";
 
-export default function CreateFoodScreen({ navigation }) {
+export default function CreateFoodScreen({ navigation, route }) {
+  const [editCreate, setEditCreate] = useState("Create");
   const [foodName, setFoodName] = useState("");
   const [servingSize, setServingSize] = useState("");
   const [calories, setCalories] = useState("");
@@ -30,7 +31,36 @@ export default function CreateFoodScreen({ navigation }) {
 
   const [protein, setProtein] = useState("");
 
-  const { addFood } = useContext(FoodContext);
+  const { addFood, foods, editFood } = useContext(FoodContext);
+
+  useEffect(() => {
+    if (route.params) {
+      console.log(route.params);
+      const findFood = foods.find(
+        (food) => food.foodName === route.params.foodName
+      );
+      setEditCreate("Edit");
+      if (findFood) {
+        console.log("food found");
+        console.log(findFood);
+
+        setFoodName(findFood.foodName ?? "");
+        setServingSize(findFood.servingSize ?? "");
+        setCalories(findFood.calories ?? "");
+        setFat(findFood.fat ?? "");
+        setSaturatedFat(findFood.saturatedFat ?? "");
+        setTransFat(findFood.transFat ?? "");
+        setPolyFat(findFood.polyFat ?? "");
+        setMonoFat(findFood.monoFat ?? "");
+        setCholesterol(findFood.cholesterol ?? "");
+        setSodium(findFood.sodium ?? "");
+        setCarbs(findFood.carbs ?? "");
+        setFiber(findFood.fiber ?? "");
+        setSugar(findFood.sugar ?? "");
+        setProtein(findFood.protein ?? "");
+      }
+    }
+  }, [route.params]);
 
   const handleSaveFood = async () => {
     console.log("saving food");
@@ -53,7 +83,12 @@ export default function CreateFoodScreen({ navigation }) {
         protein: protein,
       };
 
-      addFood(newFood);
+      console.log(editCreate);
+      if (editCreate === "Create") {
+        addFood(newFood);
+      } else {
+        editFood(newFood);
+      }
 
       navigation.navigate("Saved Foods");
       console.log("Navingating back to savedFoodScreen");

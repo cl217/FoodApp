@@ -1,5 +1,12 @@
 import React, { useContext } from "react";
-import { StyleSheet, View, Text, FlatList, Button } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import { SecondaryButton } from "../../components/Button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FoodContext } from "../../components/FoodContext";
@@ -11,6 +18,12 @@ export default function SaveFoodScreen({ navigation }) {
   let row = [];
   let prevOpenedRow;
 
+  const handleEditFood = (item) => {
+    const foodName = item.foodName;
+    console.log(foodName);
+    navigation.navigate("Create Food", { foodName });
+  };
+
   const renderFlatListItem = ({ item, index }, onDelete) => (
     <Swipeable
       renderRightActions={(progress, dragX) => renderRightView(onDelete)}
@@ -18,14 +31,16 @@ export default function SaveFoodScreen({ navigation }) {
       ref={(ref) => (row[index] = ref)}
       rightOpenValue={-100}
     >
-      <View style={styles.foodListItem}>
-        <View style={styles.foodName}>
-          <Text>{item.foodName}</Text>
+      <TouchableOpacity onPress={() => handleEditFood(item)}>
+        <View style={styles.foodListItem}>
+          <View style={styles.foodName}>
+            <Text>{item.foodName}</Text>
+          </View>
+          <View style={styles.foodCalories}>
+            <Text>{item.calories}</Text>
+          </View>
         </View>
-        <View style={styles.foodCalories}>
-          <Text>{item.calories}</Text>
-        </View>
-      </View>
+      </TouchableOpacity>
     </Swipeable>
   );
 

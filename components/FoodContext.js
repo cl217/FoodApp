@@ -28,12 +28,33 @@ export const FoodProvider = ({ children }) => {
   }, []);
 
   const addFood = async (food) => {
+    console.log("adding food");
     try {
       const updatedFoods = [...foods, food];
       await AsyncStorage.setItem("savedFoods", JSON.stringify(updatedFoods));
       setFoods(updatedFoods);
     } catch (error) {
       console.log("Error adding food:", error);
+    }
+  };
+
+  const editFood = async (food) => {
+    console.log("editing food");
+    try {
+      //remove from food.foodName from Foods
+      const removeExistingFood = foods.filter(
+        (item) => item.foodName !== food.foodName
+      );
+
+      //add food to Foods
+      const updatedFoods = [...removeExistingFood, food];
+
+      console.log(updatedFoods);
+
+      await AsyncStorage.setItem("savedFoods", JSON.stringify(updatedFoods));
+      setFoods(updatedFoods);
+    } catch (error) {
+      console.log("Error updating food:", error);
     }
   };
 
@@ -127,6 +148,7 @@ export const FoodProvider = ({ children }) => {
         addToFoodLog,
         removeFood,
         removeFromFoodLog,
+        editFood,
       }}
     >
       {children}
