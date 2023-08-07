@@ -100,6 +100,7 @@ export default function CreateFoodScreen({ navigation, route }) {
 
   const handleScanNutritionLabel = () => {
     console.log("scan nutrition label");
+    navigation.navigate("Nutrition Label Scanner");
   };
 
   const handleScanBarcode = async () => {

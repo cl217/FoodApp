@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { StyleSheet, View, Text, ScrollView, Modal } from "react-native";
 import Meal from "../../components/Meal";
 import { SecondaryButton } from "../../components/Button";
@@ -8,11 +8,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { FoodContext } from "../../components/FoodContext";
 
 export default function LogFoodScreen({ navigation }) {
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [dateString, setDateString] = useState("");
+  const { foodLog, foods } = useContext(FoodContext);
+  const [summaryCalories, setSummaryCalories] = useState(0);
 
   useEffect(() => {
     const formattedDate = selectedDate.toLocaleDateString("en-US", {
@@ -22,6 +25,31 @@ export default function LogFoodScreen({ navigation }) {
       day: "numeric",
     });
     setDateString(formattedDate);
+
+    const fetchSummaryData = () => {
+      let totalCalories = 0;
+      if (foodLog && foodLog.length > 0) {
+        const logForTheDay = foodLog.find((log) => log.date === dateString);
+        if (logForTheDay) {
+          console.log("dateString: " + dateString);
+          console.log("logfortheday: " + JSON.stringify(logForTheDay));
+
+          const mealLabel = ["Breakfast", "Lunch", "Dinner", "Snack"];
+          mealLabel.forEach(function (mealStr) {
+            logForTheDay[mealStr].forEach(function (fooditem) {
+              console.log(mealStr + ": " + fooditem);
+              const findFood = foods.find((food) => food.foodName === fooditem);
+              if (findFood) {
+                totalCalories += parseInt(findFood.calories);
+              }
+            });
+          });
+          console.log("totalCalories: " + totalCalories);
+        }
+      }
+      setSummaryCalories(totalCalories);
+    };
+    fetchSummaryData();
   }, [selectedDate]);
 
   const showDatePicker = () => {
@@ -88,6 +116,28 @@ export default function LogFoodScreen({ navigation }) {
           />
         </View>
 
+        <View style={styles.summary}>
+          <View>
+            <Text>Summary</Text>
+          </View>
+          <View style={styles.summaryItem}>
+            <View style={styles.summaryLabel}>
+              <Text>Calories:</Text>
+            </View>
+            <View style={styles.summaryValue}>
+              <Text>{summaryCalories} / 200</Text>
+            </View>
+          </View>
+          <View style={styles.summaryItem}>
+            <View style={styles.summaryLabel}>
+              <Text>Fiber:</Text>
+            </View>
+            <View style={styles.summaryValue}>
+              <Text>50 / 100</Text>
+            </View>
+          </View>
+        </View>
+
         <View style={styles.items}>
           <Meal text={"Breakfast"} date={dateString}></Meal>
           <Meal text={"Lunch"} date={dateString}></Meal>
@@ -100,6 +150,24 @@ export default function LogFoodScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  summary: {
+    marginTop: 30,
+    backgroundColor: "#FFF",
+    padding: 15,
+    borderRadius: 10,
+    justifyContent: "space-between",
+  },
+  summaryItem: {
+    flexDirection: "row",
+    marginBottom: 10,
+  },
+  summaryLabel: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  summaryValue: {
+    marginLeft: "auto", // Pushes the button to the top right
+  },
   container: {
     flex: 1,
     backgroundColor: "#E8EAED",
